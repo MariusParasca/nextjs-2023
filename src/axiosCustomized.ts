@@ -13,3 +13,7 @@ export const getRequest = (url: string, cookie?: string) =>
   axiosCustomized.get(url, createAxiosSessionForServer(cookie)).then((res) => res.data);
 
 export default axiosCustomized;
+
+export const axiosJsonPlaceholder = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com',
+});
