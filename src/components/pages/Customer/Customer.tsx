@@ -18,6 +18,7 @@ const CustomerComponent = ({}: Props) => {
   });
 
   if (isLoading) return <div>Loading...</div>;
+
   if (!data) return <div>Not found</div>;
 
   return (

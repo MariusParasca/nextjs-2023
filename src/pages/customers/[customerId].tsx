@@ -1,13 +1,13 @@
 import CustomerComponent from '@/components/pages/Customer/Customer';
-import { mapCustomer } from '@/lib/mappers/customers.mapper';
-import { getCustomer } from '@/lib/services/customers.service';
+import { prefetch } from '@/lib/reactQueryClientServer';
 import { checkServerSideSession } from '@/lib/session';
 import { getCustomerQueryFn } from '@/queryFns/customersQueryFns';
-import { Customer } from '@/types/types';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import React from 'react';
+
+// TODO: middlerware api validation
 
 interface Params extends ParsedUrlQuery {
   customerId: string;
@@ -26,8 +26,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   const { sessionExpired, options } = await checkServerSideSession(req, `/customers/${customerId}`);
   if (sessionExpired) return options;
 
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(['customers', customerId], getCustomerQueryFn(customerId));
+  const queryClient = await prefetch(['customers', customerId], getCustomerQueryFn(customerId, req.headers.cookie));
 
   return {
     props: {

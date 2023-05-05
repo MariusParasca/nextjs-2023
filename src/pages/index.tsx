@@ -20,6 +20,7 @@ export default function Home() {
       </Head>
       <header>
         <nav style={{ display: 'flex', gap: 20, margin: '30px 60px 0 60px' }}>
+          <Link href='/posts'>Posts</Link>
           <Link href='/customers'>Customers</Link>
           {session ? (
             <button
