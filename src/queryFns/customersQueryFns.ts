@@ -6,3 +6,8 @@ export const getCustomerQueryFn =
   (customerId: string, cookie?: string): QueryFunction<Customer, QueryKey> =>
   () =>
     getRequest(`/customers/${customerId}`, cookie);
+
+export const getCustomersQueryFn =
+  (cookie?: string): QueryFunction<Customer[], QueryKey> =>
+  () =>
+    getRequest(`/customers`, cookie);

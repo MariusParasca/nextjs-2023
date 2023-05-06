@@ -1,6 +1,8 @@
 import React from 'react';
 import { Customer } from '../../../types/types';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+import { getCustomersQueryFn } from '@/queryFns/customersQueryFns';
 
 const CustomerElement = ({ customer }: { customer: Customer }) => {
   return (
@@ -28,12 +30,14 @@ const CustomerElement = ({ customer }: { customer: Customer }) => {
   );
 };
 
-interface Props {
-  customers: Customer[];
-}
+interface Props {}
 
-const Customers = ({ customers }: Props) => {
-  if (customers?.length === 0) return <div>No data</div>;
+const Customers = ({}: Props) => {
+  const { data: customers, isLoading } = useQuery<Customer[]>(['customers'], getCustomersQueryFn());
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!customers || customers?.length === 0) return <div>No data</div>;
 
   return (
     <div>

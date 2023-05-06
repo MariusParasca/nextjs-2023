@@ -1,29 +1,29 @@
 import Customers from '@/components/pages/Customers/Customers';
-import { mapCustomer } from '@/lib/mappers/customers.mapper';
-import { getCustomers } from '@/lib/services/customers.service';
+import { prefetch } from '@/lib/reactQueryClientServer';
 import { checkServerSideSession } from '@/lib/session';
-import { Customer } from '@/types/types';
+import { getCustomersQueryFn } from '@/queryFns/customersQueryFns';
+import { dehydrate } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
-interface Props {
-  customers: Customer[];
-}
+interface Props {}
 
-function CustomersPage({ customers }: Props) {
-  return <Customers customers={customers} />;
+function CustomersPage({}: Props) {
+  return <Customers />;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
   const { sessionExpired, options } = await checkServerSideSession(req, '/customers');
   if (sessionExpired) return options;
 
-  const customers = await getCustomers();
+  // const customers = await getCustomers();
 
-  // Pass data to the page via props
+  const queryClient = await prefetch(['customers'], getCustomersQueryFn(req.headers.cookie));
+
   return {
     props: {
-      customers: customers.map((customer) => mapCustomer(customer)),
+      dehydratedState: dehydrate(queryClient),
+      // customers: customers.map((customer) => mapCustomer(customer)),
     },
   };
 };

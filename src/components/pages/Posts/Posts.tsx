@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import React, { Fragment } from 'react';
 
 export const Posts = () => {
-  const { data, isLoading, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery<Post[]>({
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery<Post[]>({
     queryKey: ['posts'],
     queryFn: getPostsQueryFn,
     getNextPageParam: (_, pages) => pages.length + 1,
@@ -26,7 +26,7 @@ export const Posts = () => {
           ))}
         </Fragment>
       ))}
-      {isFetching ? (
+      {isFetchingNextPage ? (
         <div>Loading more...</div>
       ) : hasNextPage ? (
         <button onClick={() => fetchNextPage()}>Load more</button>

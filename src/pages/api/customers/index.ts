@@ -1,13 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { mapCustomer } from '@/lib/mappers/customers.mapper';
-import { getCustomer } from '@/lib/services/customers.service';
+import { getCustomers } from '@/lib/services/customers.service';
 import { checkSeverRequestSession } from '@/lib/session';
 import { Customer } from '@/types/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
-
-export default async function customerHandler(req: NextApiRequest, res: NextApiResponse<Data>) {
+export default async function customersHandler(req: NextApiRequest, res: NextApiResponse<Customer[]>) {
   const isLogged = await checkSeverRequestSession(req, res);
 
   if (!isLogged) return;
@@ -18,11 +16,7 @@ export default async function customerHandler(req: NextApiRequest, res: NextApiR
     res.status(400);
   }
 
-  const customer = await getCustomer(customerId);
+  const customers = await getCustomers();
 
-  if (!customer) {
-    return res.status(404);
-  }
-
-  res.status(200).json(mapCustomer(customer));
+  res.status(200).json(customers.map((customer) => mapCustomer(customer)));
 }
