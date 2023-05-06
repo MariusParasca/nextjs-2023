@@ -46,7 +46,7 @@ const Customers = ({}: Props) => {
         <CustomerElement customer={customer} key={customer.id} />
       ))}
 
-      {/* <NavLink to={`/protected/customers/create`}>Create Customer</NavLink> */}
+      <Link href={`/customers/create`}>Create Customer</Link>
     </div>
   );
 };

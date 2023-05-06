@@ -27,3 +27,10 @@ export type Customer = {
   balance: number;
   customProp?: string;
 };
+
+export type ApiError =
+  | {
+      error: boolean;
+      message: string;
+    }
+  | string;

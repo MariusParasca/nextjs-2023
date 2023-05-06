@@ -1,5 +1,6 @@
 import { IncomingMessage } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
 import { getSession } from 'next-auth/react';
 
 export const checkServerSideSession = async (
@@ -31,7 +32,8 @@ export const checkServerSideSession = async (
 };
 
 export const checkSeverRequestSession = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, {});
+
   if (!session) {
     res.status(401).json({ message: 'Unauthorized' });
     return false;
