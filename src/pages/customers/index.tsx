@@ -1,6 +1,5 @@
 import Customers from '@/components/pages/Customers/Customers';
 import { prefetch } from '@/lib/reactQueryClientServer';
-import { checkServerSideSession } from '@/lib/session';
 import { getCustomersQueryFn } from '@/queryFns/customersQueryFns';
 import { dehydrate } from '@tanstack/react-query';
 import { GetServerSideProps } from 'next';
@@ -13,9 +12,6 @@ function CustomersPage({}: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
-  const { sessionExpired, options } = await checkServerSideSession(req, '/customers');
-  if (sessionExpired) return options;
-
   // const customers = await getCustomers();
 
   const queryClient = await prefetch(['customers'], getCustomersQueryFn(req.headers.cookie));

@@ -1,7 +1,6 @@
 import { mapCustomer } from '@/lib/mappers/customers.mapper';
 import CustomerModel from '@/lib/models/Customer';
 import { getCustomers } from '@/lib/services/customers.service';
-import { checkSeverRequestSession } from '@/lib/session';
 import { customerBodyValidation } from '@/lib/validators/customers.validator';
 import { ApiError, Customer } from '@/types/types';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -30,9 +29,6 @@ async function getCustomersRequest(req: NextApiRequest, res: ResponseApi) {
 }
 
 export default async function customersHandler(req: NextApiRequest, res: ResponseApi) {
-  const isLogged = await checkSeverRequestSession(req, res);
-  if (!isLogged) return;
-
   if (req.method === 'POST') {
     return postCustomerRequest(req, res);
   } else if (req.method === 'GET') {
