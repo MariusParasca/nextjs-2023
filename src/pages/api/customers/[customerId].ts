@@ -11,7 +11,7 @@ async function getCustomerRequest(req: NextApiRequest, res: ResponseApi) {
   const customerId = req.query.customerId as string;
 
   if (!customerId) {
-    res.status(400);
+    res.status(400).send('CustomerId is required');
   }
 
   const customer = await getCustomer(customerId);
@@ -44,5 +44,7 @@ export default async function customerHandler(req: NextApiRequest, res: Response
     return getCustomerRequest(req, res);
   } else if (req.method === 'DELETE') {
     return deleteCustomerRequest(req, res);
+  } else {
+    res.status(405).send('Only GET and DELETE requests allowed');
   }
 }

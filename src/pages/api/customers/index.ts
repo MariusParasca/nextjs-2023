@@ -8,7 +8,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ResponseApi = NextApiResponse<Customer[] | Customer | ApiError>;
 
-async function postCustomer(req: NextApiRequest, res: ResponseApi) {
+async function postCustomerRequest(req: NextApiRequest, res: ResponseApi) {
   try {
     const { error } = customerBodyValidation(req.body);
     if (error) return res.status(400).json({ error: true, message: error.details[0].message });
@@ -23,16 +23,10 @@ async function postCustomer(req: NextApiRequest, res: ResponseApi) {
   }
 }
 
-async function getCustomer(req: NextApiRequest, res: ResponseApi) {
-  const customerId = req.query.customerId as string;
-
-  if (!customerId) {
-    res.status(400);
-  }
-
+async function getCustomersRequest(req: NextApiRequest, res: ResponseApi) {
   const customers = await getCustomers();
 
-  res.status(200).json(customers.map((customer) => mapCustomer(customer)));
+  return res.status(200).json(customers.map((customer) => mapCustomer(customer)));
 }
 
 export default async function customersHandler(req: NextApiRequest, res: ResponseApi) {
@@ -40,8 +34,10 @@ export default async function customersHandler(req: NextApiRequest, res: Respons
   if (!isLogged) return;
 
   if (req.method === 'POST') {
-    postCustomer(req, res);
+    return postCustomerRequest(req, res);
   } else if (req.method === 'GET') {
-    getCustomer(req, res);
+    return getCustomersRequest(req, res);
+  } else {
+    res.status(405).send('Only POST and GET requests allowed');
   }
 }
