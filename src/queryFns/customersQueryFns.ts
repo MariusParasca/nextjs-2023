@@ -16,3 +16,6 @@ export const getCustomersQueryFn =
 
 export const createCustomerMutationFn = (body: CustomerBody) =>
   axiosCustomized.post('/customers', body).then((res) => res.data);
+
+export const deleteCustomerMutationFn = (customerId: string) =>
+  axiosCustomized.delete(`/customers/${customerId}`).then((res) => res.data);

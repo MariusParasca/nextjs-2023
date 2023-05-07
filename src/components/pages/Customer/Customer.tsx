@@ -1,6 +1,7 @@
-import { getCustomerQueryFn } from '@/queryFns/customersQueryFns';
+import { useQueryClientInstance } from '@/contexts/QueryClientContext';
+import { deleteCustomerMutationFn, getCustomerQueryFn } from '@/queryFns/customersQueryFns';
 import { Customer } from '@/types/types';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,6 +18,17 @@ const CustomerComponent = ({}: Props) => {
     queryFn: getCustomerQueryFn(customerId),
   });
 
+  const { queryClient } = useQueryClientInstance();
+  const { push } = useRouter();
+
+  const { isLoading: isDeleting, mutate } = useMutation({
+    mutationFn: deleteCustomerMutationFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+      push('/customers');
+    },
+  });
+
   if (isLoading) return <div>Loading...</div>;
 
   if (!data) return <div>Not found</div>;
@@ -31,12 +43,10 @@ const CustomerComponent = ({}: Props) => {
       <div>{data.customProp}</div>
       {/* <Link to={`/protected/customers/edit/${data.id}`}>Edit</Link> */}
       <button
-        // onClick={() => {
-        //   deleteCustomer(data.id)
-        //     .unwrap()
-        //     .then((result) => navigate(`/protected/customers`));
-        // }}
-        // disabled={isDeleting}
+        onClick={() => {
+          mutate(data.id);
+        }}
+        disabled={isDeleting}
         type='button'
       >
         Delete

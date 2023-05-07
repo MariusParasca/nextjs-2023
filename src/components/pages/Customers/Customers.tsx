@@ -1,10 +1,20 @@
 import React from 'react';
 import { Customer } from '../../../types/types';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
-import { getCustomersQueryFn } from '@/queryFns/customersQueryFns';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { deleteCustomerMutationFn, getCustomersQueryFn } from '@/queryFns/customersQueryFns';
+import { useQueryClientInstance } from '@/contexts/QueryClientContext';
 
 const CustomerElement = ({ customer }: { customer: Customer }) => {
+  const { queryClient } = useQueryClientInstance();
+
+  const { isLoading, mutate } = useMutation({
+    mutationFn: deleteCustomerMutationFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customers'] });
+    },
+  });
+
   return (
     <div>
       <p>
@@ -16,10 +26,10 @@ const CustomerElement = ({ customer }: { customer: Customer }) => {
       <div style={{ marginTop: '10px' }}>
         <Link href={`/customers/${customer.id}`}>View</Link>
         <button
-          // onClick={() => {
-          //   deleteCustomer(customer.id);
-          // }}
-          // disabled={isLoading}
+          onClick={() => {
+            mutate(customer.id);
+          }}
+          disabled={isLoading}
           type='button'
         >
           Delete
