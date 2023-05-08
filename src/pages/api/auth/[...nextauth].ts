@@ -22,6 +22,7 @@ const authOptions: NextAuthOptions = {
       authorize: async (credentials) => {
         await dbConnect();
 
+        // TODO: add sign in?
         const { email, password } = credentials as { email: string; password: string };
 
         const user = await User.findOne({ email: email });
@@ -43,6 +44,12 @@ const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  // fixes wrong redirect after login
+  callbacks: {
+    async redirect({ url, baseUrl }) {
+      return baseUrl;
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
   // pages: {}
 };

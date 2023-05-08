@@ -3,12 +3,15 @@ import '@/styles/globals.css';
 import { Hydrate, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider, useSession } from 'next-auth/react';
 import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
 function AppSessionWrapper({ children }: { children: ReactNode }) {
   const { status } = useSession();
+  const { route } = useRouter();
 
-  if (status === 'loading')
+  // do not show loading for index page
+  if (status === 'loading' && !['/'].includes(route))
     return (
       <div
         style={{

@@ -8,7 +8,9 @@ import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  const isLoading = status === 'loading';
 
   return (
     <>
@@ -19,7 +21,7 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <header>
-        <nav style={{ display: 'flex', gap: 20, margin: '30px 60px 0 60px' }}>
+        <nav style={{ display: 'flex', gap: 20, margin: '30px 60px 0 60px', opacity: isLoading ? 0.5 : 1 }}>
           <Link href='/posts'>Posts</Link>
           <Link href='/customers'>Customers</Link>
           {session ? (
@@ -27,11 +29,14 @@ export default function Home() {
               onClick={() => {
                 signOut();
               }}
+              disabled={isLoading}
             >
               Sign out
             </button>
           ) : (
-            <Link href='/api/auth/signin'>Sign in</Link>
+            <button disabled={isLoading}>
+              <Link href='/api/auth/signin'>Sign in</Link>
+            </button>
           )}
         </nav>
       </header>
