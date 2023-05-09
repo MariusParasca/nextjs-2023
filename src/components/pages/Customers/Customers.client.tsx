@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import { Customer } from '../../../types/types';
 import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { deleteCustomerMutationFn, getCustomersQueryFn } from '@/queryFns/customersQueryFns';
-import { useQueryClientInstance } from '@/contexts/QueryClientContext';
+import { useQueryClientInstance } from '@/contexts/QueryClientContext.client';
 
 const CustomerElement = ({ customer }: { customer: Customer }) => {
   const { queryClient } = useQueryClientInstance();
@@ -43,7 +45,10 @@ const CustomerElement = ({ customer }: { customer: Customer }) => {
 interface Props {}
 
 const Customers = ({}: Props) => {
-  const { data: customers, isLoading } = useQuery<Customer[]>(['customers'], getCustomersQueryFn());
+  const { data: customers, isLoading } = useQuery<Customer[]>({
+    queryKey: ['customers'],
+    queryFn: getCustomersQueryFn,
+  });
 
   if (isLoading) return <div>Loading...</div>;
 

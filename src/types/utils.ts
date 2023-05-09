@@ -7,3 +7,7 @@ export type MongooseDocument<T> = Document<unknown, {}, T> &
     },
     never
   >;
+
+export type RequestParams<T> = {
+  params: T;
+};

@@ -5,7 +5,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (['/'].includes(pathname)) {
-    return NextResponse.next();
+    return NextResponse.next(); 
   }
 
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });

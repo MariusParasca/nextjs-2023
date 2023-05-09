@@ -1,3 +1,4 @@
+'use client';
 import { getPostsQueryFn } from '@/queryFns/postsQueryFns';
 import { Post } from '@/types/types';
 import { useInfiniteQuery } from '@tanstack/react-query';

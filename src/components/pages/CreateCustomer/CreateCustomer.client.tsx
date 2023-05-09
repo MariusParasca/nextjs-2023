@@ -1,7 +1,8 @@
-import { useQueryClientInstance } from '@/contexts/QueryClientContext';
+'use client';
+
 import { createCustomerMutationFn } from '@/queryFns/customersQueryFns';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export const CreateCustomer = () => {
@@ -9,13 +10,11 @@ export const CreateCustomer = () => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState(0);
 
-  const { queryClient } = useQueryClientInstance();
   const { push } = useRouter();
 
   const { isLoading, mutate, isError, error } = useMutation({
     mutationFn: createCustomerMutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customers'] });
       push('/customers');
     },
   });

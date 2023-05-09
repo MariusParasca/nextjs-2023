@@ -1,30 +1,28 @@
-import { useQueryClientInstance } from '@/contexts/QueryClientContext';
+'use client';
+
 import { deleteCustomerMutationFn, getCustomerQueryFn } from '@/queryFns/customersQueryFns';
 import { Customer } from '@/types/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
-
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 interface Props {}
 
 const CustomerComponent = ({}: Props) => {
-  const router = useRouter();
-  const customerId = router.query.customerId as string;
+  const params = useParams();
+  const customerId = params?.customerId as string;
 
   const { data, isLoading } = useQuery<Customer>({
     queryKey: ['customers', customerId],
     queryFn: getCustomerQueryFn(customerId),
   });
 
-  const { queryClient } = useQueryClientInstance();
   const { push } = useRouter();
 
   const { isLoading: isDeleting, mutate } = useMutation({
     mutationFn: deleteCustomerMutationFn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['customers'] });
       push('/customers');
     },
   });
@@ -41,7 +39,6 @@ const CustomerComponent = ({}: Props) => {
       <p>Name: {data.name}</p>
       <p>Balance: {data.balance}</p>
       <div>{data.customProp}</div>
-      {/* <Link to={`/protected/customers/edit/${data.id}`}>Edit</Link> */}
       <button
         onClick={() => {
           mutate(data.id);
