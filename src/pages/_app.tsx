@@ -11,21 +11,21 @@ function AppSessionWrapper({ children }: { children: ReactNode }) {
   const { route } = useRouter();
 
   // do not show loading for index page
-  if (status === 'loading' && !['/'].includes(route))
-    return (
-      <div
-        style={{
-          height: '100vh',
-          width: '100vw',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: '1.5rem',
-        }}
-      >
-        Loading...
-      </div>
-    );
+  // if (status === 'loading' && !['/'].includes(route))
+  //   return (
+  //     <div
+  //       style={{
+  //         height: '100vh',
+  //         width: '100vw',
+  //         display: 'flex',
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+  //         fontSize: '1.5rem',
+  //       }}
+  //     >
+  //       Loading...
+  //     </div>
+  //   );
 
   return <>{children}</>;
 }
