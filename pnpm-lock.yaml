@@ -19,6 +19,7 @@ specifiers:
   next-auth: ^4.22.1
   react: 18.2.0
   react-dom: 18.2.0
+  swr: ^2.1.5
   typescript: 5.0.4
 
 dependencies:
@@ -36,6 +37,7 @@ dependencies:
   next-auth: 4.22.1_2xek2u27flvv5bywadnu4xxgx4
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  swr: 2.1.5_react@18.2.0
   typescript: 5.0.4
 
 devDependencies:
@@ -2651,6 +2653,15 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
     dev: true
+
+  /swr/2.1.5_react@18.2.0:
+    resolution: {integrity: sha512-/OhfZMcEpuz77KavXST5q6XE9nrOBOVcBLWjMT+oAE/kQHyE3PASrevXCtQDZ8aamntOfFkbVJp7Il9tNBQWrw==}
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
 
   /synckit/0.8.5:
     resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}

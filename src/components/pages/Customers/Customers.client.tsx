@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { deleteCustomerMutationFn, getCustomersQueryFn } from '@/queryFns/customersQueryFns';
 import { useQueryClientInstance } from '@/contexts/QueryClientContext.client';
+import useSWR, { SWRConfig, unstable_serialize } from 'swr';
 
 const CustomerElement = ({ customer }: { customer: Customer }) => {
   const { queryClient } = useQueryClientInstance();
@@ -45,12 +46,18 @@ const CustomerElement = ({ customer }: { customer: Customer }) => {
 interface Props {}
 
 const Customers = ({}: Props) => {
-  const { data: customers, isLoading } = useQuery<Customer[]>({
-    queryKey: ['customers'],
-    queryFn: getCustomersQueryFn,
-  });
+  // console.log('%c initCustomers', 'color: red', initCustomers);
+  const { data: customers, isLoading } = useSWR<Customer[]>(['customers'], getCustomersQueryFn);
 
-  if (isLoading) return <div>Loading...</div>;
+  console.log('%c data', 'color: red', customers);
+  console.log('%c isLoading', 'color: red', isLoading);
+
+  // const { data: customers, isLoading } = useQuery<Customer[]>({
+  //   queryKey: ['customers'],
+  //   queryFn: getCustomersQueryFn,
+  // });
+
+  if (!customers && isLoading) return <div>Loading...</div>;
 
   if (!customers || customers?.length === 0) return <div>No data</div>;
 
@@ -67,3 +74,11 @@ const Customers = ({}: Props) => {
 };
 
 export default Customers;
+
+export const CustomersWrapper = ({ customers }: { customers: Customer[] }) => {
+  return (
+    <SWRConfig value={{ fallback: { [unstable_serialize(['customers'])]: customers } }}>
+      <Customers />
+    </SWRConfig>
+  );
+};
