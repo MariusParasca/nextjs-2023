@@ -28,6 +28,12 @@ export type Customer = {
   customProp?: string;
 };
 
+export type Album = {
+  userId: number;
+  id: number;
+  title: string;
+};
+
 export type ApiError =
   | {
       error: boolean;

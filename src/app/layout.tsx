@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header>
             <nav style={{ display: 'flex', gap: 20, margin: '30px 60px 0 60px' }}>
               <Link href='/'>Home</Link>
+              <Link href='/parallel'>Parallel</Link>
               <Link href='/posts'>Posts</Link>
               <Link href='/customers'>Customers</Link>
               <SigningButtons />
